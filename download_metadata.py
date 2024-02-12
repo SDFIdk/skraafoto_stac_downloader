@@ -4,8 +4,8 @@ import json
 import time
 
 results_folder = 'C:/Temp/skraafoto_stack_api_results'
-save_copy_as_shp = True ## Requires install of geopandas. Can be either False or Ture
-save_copy_as_gpkg = True ## Requires install of geopandas. Can be either False or Ture
+save_copy_as_shp = False ## Requires install of geopandas. Can be either False or Ture
+save_copy_as_gpkg = False ## Requires install of geopandas. Can be either False or Ture
 
 token = 'fda85a3e152879320b575898f0be683d'
 
