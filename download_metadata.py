@@ -1,22 +1,20 @@
-import sys, os, time
+import os, time
 import requests
 import json
 import time
 
 results_folder = 'C:/Temp/skraafoto_stack_api_results'
-save_copy_as_shp = False ## Requires install of geopandas
-save_copy_as_gpkg = False ## Requires install of geopandas
+save_copy_as_shp = True ## Requires install of geopandas. Can be either False or Ture
+save_copy_as_gpkg = True ## Requires install of geopandas. Can be either False or Ture
 
 token = 'fda85a3e152879320b575898f0be683d'
 
 year = [2017]  ### Can be more than one year.. [2017, 2019, 2021, 2023]
 direction = ['east'] ### Can be more than one direction. Options are ['nadir','north','south','east','west']
-roi_coordinates = '[722000.0,6165800.0],[722000.0,6175800.0],[743000.0,6175800.0],[743000.0,6165800.0],[722000.0,6165800.0]'
 ### Polygon area to seach for images. Use following coordinates for entire DK: [120000.0,5900000.0],[120000.0,6500000.0],[1000000.0,6500000.0],[1000000.0,5900000.0],[120000.0,5900000.0] -- Be awere, that the first set of coordinates, must match the last. The polygons does not have to be an exact square.
-#roi_coordinates = '[120000.0,5900000.0],[120000.0,6500000.0],[1000000.0,6500000.0],[1000000.0,5900000.0],[120000.0,5900000.0]'
+roi_coordinates = '[722000.0,6165800.0],[722000.0,6175800.0],[743000.0,6175800.0],[743000.0,6165800.0],[722000.0,6165800.0]'
 
 limit = 1000
-
 
 def generate_base_urls(token, year, direction, roi_coordinates,limit):
     urls = []
@@ -96,11 +94,7 @@ def download_metadata(results_folder, save_copy_as_shp, save_copy_as_gpkg, year,
             try:
                 import geopandas as gpd
 
-                #gdf = gpd.read_file(geojson_out)
-                features = feature_collection.get('features', [])
-                gdf = gpd.GeoDataFrame.from_features(features)
-                #gdf = gpd.GeoDataFrame.from_features(feature_collection)
-
+                gdf = gpd.read_file(geojson_out)
                 gdf = gdf.set_crs('epsg:25832',allow_override=True)
                 shp_folder = f'{results_folder}/shp_footprints_{params[cnt-1][0]}_{params[cnt-1][1]}'
                 if not os.path.exists(shp_folder):
@@ -112,14 +106,11 @@ def download_metadata(results_folder, save_copy_as_shp, save_copy_as_gpkg, year,
                 print (e)
         
         if save_copy_as_gpkg == True:
+            print ('Saving results as .gpkg file')
             try:
-                print ('Saving results as .gpkg file')
                 import geopandas as gpd
 
-                #gdf = gpd.read_file(geojson_out)
-                #gdf = gpd.GeoDataFrame.from_features(feature_collection)
-                features = feature_collection.get('features', [])
-                gdf = gpd.GeoDataFrame.from_features(features)
+                gdf = gpd.read_file(geojson_out)
                 gdf.crs = 'epsg:25832'
                 gpkg_folder = f'{results_folder}/gpkg_footprints_{params[cnt-1][0]}_{params[cnt-1][1]}'
                 if not os.path.exists(gpkg_folder):
