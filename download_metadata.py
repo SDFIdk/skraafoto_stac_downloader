@@ -1,4 +1,4 @@
-import os, time
+import os
 import requests
 import json
 import time
