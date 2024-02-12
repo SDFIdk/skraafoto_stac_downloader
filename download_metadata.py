@@ -2,12 +2,13 @@ import os
 import requests
 import json
 import time
+import sys
 
 results_folder = 'C:/Temp/skraafoto_stack_api_results'
 save_copy_as_shp = False ## Requires install of geopandas. Can be either False or Ture
 save_copy_as_gpkg = False ## Requires install of geopandas. Can be either False or Ture
 
-token = 'fda85a3e152879320b575898f0be683d'
+token = '' ## Insert token from dataforsyningen user..
 
 year = [2017]  ### Can be more than one year.. [2017, 2019, 2021, 2023]
 direction = ['east'] ### Can be more than one direction. Options are ['nadir','north','south','east','west']
@@ -27,6 +28,9 @@ def generate_base_urls(token, year, direction, roi_coordinates,limit):
 
 
 def download_metadata(results_folder, save_copy_as_shp, save_copy_as_gpkg, year, direction, roi_coordinates, limit):
+    if token == '':
+        print ('Please provide a valid token from your user on dataforsyningen.dk')
+        sys.exit()
     current_time_seconds = time.time()
     timestamp_folder = time.strftime("%Y%m%d_%H%M%S", time.localtime(current_time_seconds))
     results_folder = f'{results_folder}/{timestamp_folder}_results'
